@@ -1,12 +1,13 @@
 package com.ClinicManagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "medical_registry")
 public class MedicalRegistry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,20 +17,21 @@ public class MedicalRegistry {
     private String hospitalizationReason;
     private String medication;
     private String diseases;
-
+    @OneToOne(mappedBy = "medicalRegistry")
+    private Patient patient;
 
 
     public MedicalRegistry() {
     }
 
-    public MedicalRegistry(Long id,Date lastDoctorVisit, Boolean hospitalization, String medication, String hospitalizationReason, String diseases) {
+    public MedicalRegistry(Long id,Date lastDoctorVisit, Boolean hospitalization, String medication, String hospitalizationReason, String diseases, Patient patient) {
         this.id = id;
         this.lastDoctorVisit = lastDoctorVisit;
         this.hospitalization = hospitalization;
         this.medication = medication;
         this.hospitalizationReason = hospitalizationReason;
         this.diseases = diseases;
-
+        this.patient = patient;
     }
 
     public Long getId() {
@@ -78,5 +80,13 @@ public class MedicalRegistry {
 
     public void setDiseases(String diseases) {
         this.diseases = diseases;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

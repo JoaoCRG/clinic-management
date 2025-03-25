@@ -1,9 +1,10 @@
 package com.ClinicManagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table(name = "lots")
 public class Lot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +13,7 @@ public class Lot {
     private String reference;
     private String lotNumber;
     @ManyToOne
-    @JoinColumn(name = "appointment_id")
+    @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;
 
     public Lot() {}

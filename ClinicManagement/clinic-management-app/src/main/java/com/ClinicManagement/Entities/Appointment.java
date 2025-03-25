@@ -2,12 +2,13 @@ package com.ClinicManagement.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "appointments")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,26 +16,19 @@ public class Appointment {
     private LocalDate date;
     private String procedure;
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Lot> lots;
     @ManyToOne
-    @JoinColumn(name = "medical_registry_id", nullable = false)
-    @JsonIgnore
-    private MedicalRegistry medicalRegistry;
-    @ManyToOne
-    @JoinColumn(name = "pacient_id", nullable = false)
-    @JsonBackReference
-    private Pacient pacient;
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 
     public Appointment() {}
 
-    public Appointment(Long id, LocalDate date, String procedure, List<Lot> lots, MedicalRegistry medicalRegistry,Pacient pacient) {
+    public Appointment(Long id, LocalDate date, String procedure, List<Lot> lots, Patient patient) {
         this.id = id;
         this.date = date;
         this.procedure = procedure;
         this.lots = lots;
-        this.medicalRegistry = medicalRegistry;
-        this.pacient = pacient;
+        this.patient = patient;
     }
 
     public Long getId() {
@@ -69,19 +63,12 @@ public class Appointment {
         this.lots = lots;
     }
 
-    public MedicalRegistry getMedicalRegistry() {
-        return medicalRegistry;
+    public Patient getPacient() {
+        return patient;
     }
 
-    public Pacient getPacient() {
-        return pacient;
+    public void setPacient(Patient patient) {
+        this.patient = patient;
     }
 
-    public void setPacient(Pacient pacient) {
-        this.pacient = pacient;
-    }
-
-    public void setMedicalRegistry(MedicalRegistry medicalRegistry) {
-        this.medicalRegistry = medicalRegistry;
-    }
 }

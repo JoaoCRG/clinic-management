@@ -1,32 +1,28 @@
 package com.ClinicManagement.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.eclipse.angus.mail.iap.ByteArray;
 
-import java.io.File;
 import java.util.List;
     
 @Entity
-@Table
-public class Pacient {
+@Table(name = "patients")
+public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToOne
-    @JoinColumn(name = "medical_registry_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "medical_registry_id", referencedColumnName = "id")
     private MedicalRegistry medicalRegistry;
     private String phoneNumber;
-    @OneToMany(mappedBy = "pacient", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Appointment> appointmentHistory;
 
 
-public Pacient() {}
+public Patient() {}
 
-    public Pacient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory) {
+    public Patient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory) {
         this.name = name;
         this.id = id;
         this.medicalRegistry = medicalRegistry;

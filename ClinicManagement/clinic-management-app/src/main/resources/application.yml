@@ -7,6 +7,14 @@ spring:
     enabled: true
     change-log: db/changelog/master.xml
     contexts: none
+  data:
+    rest:
+      default-media-type: application/json
+  hateoas:
+    use-hal-as-default-json-media-type: false
+  mvc:
+    converters:
+     preferred-json-mapper: jackson
   datasource:
     url: jdbc:postgresql://localhost:5432/faceclinicdb
     username: admin
