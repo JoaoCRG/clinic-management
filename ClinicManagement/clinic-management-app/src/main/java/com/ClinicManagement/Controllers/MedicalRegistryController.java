@@ -34,6 +34,4 @@ public class MedicalRegistryController {
         MedicalRegistry newMedicalRegistry = medicalRegistryService.createMedicalRegistry(medicalRegistry);
         return  ResponseEntity.status(HttpStatus.CREATED).body(newMedicalRegistry);
     }
-
-
 }

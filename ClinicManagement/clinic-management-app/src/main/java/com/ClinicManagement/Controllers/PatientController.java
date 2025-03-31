@@ -2,16 +2,11 @@ package com.ClinicManagement.Controllers;
 
 import com.ClinicManagement.DTOs.PatientDTO;
 import com.ClinicManagement.Entities.Patient;
-import com.ClinicManagement.Repositories.PatientRepository;
 import com.ClinicManagement.Services.PatientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:8000")
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
@@ -40,7 +35,7 @@ public class PatientController {
         return ResponseEntity.ok(patients);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<PatientDTO> createPatient(@RequestBody Patient patient) {
         PatientDTO createdPatient = patientService.createPatient(patient);
         return ResponseEntity.ok(createdPatient);
@@ -50,5 +45,11 @@ public class PatientController {
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<PatientDTO> editPatient(@RequestBody Patient patient, @PathVariable Long id) {
+        PatientDTO editedPatient = patientService.createPatient(patient);
+        return ResponseEntity.ok(editedPatient);
     }
 }

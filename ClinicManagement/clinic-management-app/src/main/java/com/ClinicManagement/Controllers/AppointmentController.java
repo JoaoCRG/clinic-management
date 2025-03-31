@@ -30,7 +30,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointmentById(id));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
         Appointment newAppointment = appointmentService.createAppointment(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAppointment);

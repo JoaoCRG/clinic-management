@@ -3,6 +3,8 @@ package com.ClinicManagement.Entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
     
 @Entity
@@ -17,17 +19,21 @@ public class Patient {
     private MedicalRegistry medicalRegistry;
     private String phoneNumber;
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> appointmentHistory;
+    private List<Appointment> appointmentHistory = new ArrayList<>();
+    private String city;
+    private Date birthday;
 
 
 public Patient() {}
 
-    public Patient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory) {
+    public Patient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory, String city, Date birthday) {
         this.name = name;
         this.id = id;
         this.medicalRegistry = medicalRegistry;
         this.phoneNumber = phoneNumber;
         this.appointmentHistory = appointmentHistory;
+        this.city = city;
+        this.birthday = birthday;
     }
 
     public Long getId() {
@@ -68,5 +74,21 @@ public Patient() {}
 
     public void setAppointmentHistory(List<Appointment> appointmentHistory) {
         this.appointmentHistory = appointmentHistory;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }

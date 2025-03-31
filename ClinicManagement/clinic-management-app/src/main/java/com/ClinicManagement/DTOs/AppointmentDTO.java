@@ -1,7 +1,6 @@
 package com.ClinicManagement.DTOs;
 
 import com.ClinicManagement.Entities.Appointment;
-
 import java.time.LocalDate;
 import java.util.List;
 

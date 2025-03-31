@@ -1,7 +1,6 @@
 package com.ClinicManagement.DTOs;
 
 import com.ClinicManagement.Entities.Patient;
-
 import java.util.List;
 
 public class PatientDTO {

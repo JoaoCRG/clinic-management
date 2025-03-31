@@ -1,7 +1,6 @@
 package com.ClinicManagement.DTOs;
 
 import com.ClinicManagement.Entities.MedicalRegistry;
-
 import java.util.Date;
 
 public class MedicalRegistryDTO {

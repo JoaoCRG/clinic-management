@@ -17,6 +17,7 @@ public class MedicalRegistry {
     private String hospitalizationReason;
     private String medication;
     private String diseases;
+    private String allergies;
     @OneToOne(mappedBy = "medicalRegistry")
     private Patient patient;
 
@@ -24,7 +25,7 @@ public class MedicalRegistry {
     public MedicalRegistry() {
     }
 
-    public MedicalRegistry(Long id,Date lastDoctorVisit, Boolean hospitalization, String medication, String hospitalizationReason, String diseases, Patient patient) {
+    public MedicalRegistry(Long id,Date lastDoctorVisit, Boolean hospitalization, String medication, String hospitalizationReason, String diseases, Patient patient, String allergies) {
         this.id = id;
         this.lastDoctorVisit = lastDoctorVisit;
         this.hospitalization = hospitalization;
@@ -32,6 +33,7 @@ public class MedicalRegistry {
         this.hospitalizationReason = hospitalizationReason;
         this.diseases = diseases;
         this.patient = patient;
+        this.allergies = allergies;
     }
 
     public Long getId() {
@@ -88,5 +90,13 @@ public class MedicalRegistry {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(String allergy) {
+        this.allergies = allergies;
     }
 }

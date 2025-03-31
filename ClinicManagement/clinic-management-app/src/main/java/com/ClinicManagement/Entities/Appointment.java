@@ -20,15 +20,17 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+    private LocalDate schedule;
 
     public Appointment() {}
 
-    public Appointment(Long id, LocalDate date, String procedure, List<Lot> lots, Patient patient) {
+    public Appointment(Long id, LocalDate date, String procedure, List<Lot> lots, Patient patient, LocalDate schedule) {
         this.id = id;
         this.date = date;
         this.procedure = procedure;
         this.lots = lots;
         this.patient = patient;
+        this.schedule = schedule;
     }
 
     public Long getId() {
@@ -71,4 +73,11 @@ public class Appointment {
         this.patient = patient;
     }
 
+    public LocalDate getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(LocalDate schedule) {
+        this.schedule = schedule;
+    }
 }

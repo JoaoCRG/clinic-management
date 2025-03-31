@@ -22,7 +22,7 @@ public class PatientService {
 
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll().stream()
-                .map(PatientDTO::new) // Converte a entidade para DTO
+                .map(PatientDTO::new)
                 .collect(Collectors.toList());
     }
 
