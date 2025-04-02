@@ -19,12 +19,27 @@ export async function getAllPatients() {
 
 export async function createPatient(patientData) {
     try {
-      const response = await axios.post(API_URL + "/add",{
+      const response = await axios.post(API_URL + "/add", patientData, {
         auth: {
           username: "user",
           password: "12345"
         }
-      }, patientData);
+      });
+      return response.data; 
+    } catch (error) {
+      console.error("Erro ao criar paciente:", error);
+      throw error;
+    }
+  }   
+
+  export async function editPatient(patientData) {
+    try {
+      const response = await axios.post(API_URL + "/add", patientData, {
+        auth: {
+          username: "user",
+          password: "12345"
+        }
+      });
       return response.data; 
     } catch (error) {
       console.error("Erro ao criar paciente:", error);

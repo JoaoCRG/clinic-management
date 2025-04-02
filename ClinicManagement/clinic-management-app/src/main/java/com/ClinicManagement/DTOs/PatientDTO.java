@@ -1,12 +1,15 @@
 package com.ClinicManagement.DTOs;
 
 import com.ClinicManagement.Entities.Patient;
+import java.sql.Date;
 import java.util.List;
 
 public class PatientDTO {
     private Long id;
     private String name;
     private String phoneNumber;
+    private String city;
+    private Date birthday;
     private MedicalRegistryDTO medicalRegistry;
     private List<AppointmentDTO> appointmentHistory;
 
@@ -14,6 +17,8 @@ public class PatientDTO {
         this.id = patient.getId();
         this.name = patient.getName();
         this.phoneNumber = patient.getPhoneNumber();
+        this.city = patient.getCity();
+        this.birthday = patient.getBirthday();
         this.medicalRegistry = new MedicalRegistryDTO(patient.getMedicalRegistry());
         this.appointmentHistory = patient.getAppointmentHistory().stream()
                 .map(AppointmentDTO::new)
@@ -58,5 +63,21 @@ public class PatientDTO {
 
     public void setMedicalRegistry(MedicalRegistryDTO medicalRegistry) {
         this.medicalRegistry = medicalRegistry;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }

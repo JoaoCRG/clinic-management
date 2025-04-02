@@ -1,8 +1,6 @@
 package com.ClinicManagement.Entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;

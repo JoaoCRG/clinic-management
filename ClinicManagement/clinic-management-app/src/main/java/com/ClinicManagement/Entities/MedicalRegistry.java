@@ -1,10 +1,7 @@
 package com.ClinicManagement.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.sql.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "medical_registry")

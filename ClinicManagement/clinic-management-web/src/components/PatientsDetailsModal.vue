@@ -21,32 +21,36 @@
               <v-list dense>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Última Consulta:</v-list-item-title>
+                    <v-list-item-title> <v-icon>mdi-arrow-left</v-icon> Última Consulta</v-list-item-title>
                     <v-list-item-subtitle>{{ patient?.medicalRegistry?.lastDoctorVisit }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Hospitalização:</v-list-item-title>
+                    <v-list-item-title><v-icon>mdi-medication</v-icon>  Hospitalização</v-list-item-title>
                     <v-list-item-subtitle>{{ patient?.medicalRegistry?.hospitalization ? 'Sim' : 'Não' }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item v-if="patient?.medicalRegistry?.hospitalization">
                   <v-list-item-content>
-                    <v-list-item-title>Motivo:</v-list-item-title>
+                    <v-list-item-title><v-icon>mdi-information</v-icon> Motivo</v-list-item-title>
                     <v-list-item-subtitle>{{ patient?.medicalRegistry?.hospitalizationReason }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Medicação:</v-list-item-title>
+                    <v-list-item-title><v-icon>mdi-pill</v-icon>  Medicação</v-list-item-title>
                     <v-list-item-subtitle>{{ patient?.medicalRegistry?.medication }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Doenças:</v-list-item-title>
+                    <v-list-item-title><v-icon>mdi-medical-bag</v-icon> Doenças</v-list-item-title>
                     <v-list-item-subtitle>{{ patient?.medicalRegistry?.diseases }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-content>
+                    <v-list-item-title><v-icon>mdi-allergy</v-icon> Alergias</v-list-item-title>
+                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.allergies }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>

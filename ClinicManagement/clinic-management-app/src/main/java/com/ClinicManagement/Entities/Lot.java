@@ -1,6 +1,5 @@
 package com.ClinicManagement.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity

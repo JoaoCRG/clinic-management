@@ -47,9 +47,9 @@ public class PatientController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/edit/{id}")
-    public ResponseEntity<PatientDTO> editPatient(@RequestBody Patient patient, @PathVariable Long id) {
-        PatientDTO editedPatient = patientService.createPatient(patient);
-        return ResponseEntity.ok(editedPatient);
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<PatientDTO> editPatient(@PathVariable Long id, @RequestBody Patient patient) {
+        PatientDTO editedPatientDTO = patientService.editPatient(id, patient);
+        return ResponseEntity.ok(editedPatientDTO);
     }
 }

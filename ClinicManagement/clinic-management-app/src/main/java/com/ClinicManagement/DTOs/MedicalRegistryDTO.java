@@ -10,6 +10,7 @@ public class MedicalRegistryDTO {
     private String hospitalizationReason;
     private String medication;
     private String diseases;
+    private String allergies;
 
     public MedicalRegistryDTO(MedicalRegistry medicalRegistry) {
         this.id = medicalRegistry.getId();
@@ -18,6 +19,7 @@ public class MedicalRegistryDTO {
         this.hospitalizationReason = medicalRegistry.getHospitalizationReason();
         this.medication = medicalRegistry.getMedication();
         this.diseases = medicalRegistry.getDiseases();
+        this.allergies = medicalRegistry.getAllergies();
     }
 
     public Long getId() {
@@ -66,5 +68,13 @@ public class MedicalRegistryDTO {
 
     public void setLastDoctorVisit(Date lastDoctorVisit) {
         this.lastDoctorVisit = lastDoctorVisit;
+    }
+
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
     }
 }
