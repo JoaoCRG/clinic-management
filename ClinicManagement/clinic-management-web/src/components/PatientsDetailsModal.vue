@@ -56,7 +56,14 @@
               </v-list>
               <v-card-actions class="buttons">
           <v-spacer></v-spacer>
-          <button>Editar Informação</button>
+          <button @click="openPatientModal(patient)" >Editar Informação</button>
+          <AddPatientModal
+   :isOpen="isModalOpen"
+   :isEdit="true"
+   :editingPatient="selectedPatient"
+   @update:isOpen="isModalOpen = $event"
+/>
+
         </v-card-actions>
             </v-tab-item>
   
@@ -98,8 +105,18 @@
   </template>
   
   <script>
+  import AddPatientModal from './AddPatientModal.vue';
+
 export default {
+  components: {
+    AddPatientModal
+  },
   methods: {
+    openPatientModal(patient) {
+     console.log("Abrindo modal para paciente:", patient); // Debug
+     this.selectedPatient = { ...patient }; // Faz uma cópia para evitar mutações diretas
+     this.isModalOpen = true;
+   },
   close() {
     this.$emit("update:isOpen", false); // Emite evento para fechar o modal
   }
@@ -111,6 +128,7 @@ export default {
   data() {
     return {
       tab: "medical",
+      isModalOpen: false,
       patientData: null // Armazena localmente para garantir atualização reativa
     };
   },

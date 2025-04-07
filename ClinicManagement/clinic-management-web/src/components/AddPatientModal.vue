@@ -6,7 +6,35 @@
 
         </v-card-title>
   
-        <v-card-text>
+        <v-card-text v-if="isEdit">
+          <v-form ref="form">
+            <v-text-field v-model="editedPatient.name" label="Nome" required></v-text-field>
+            <v-text-field v-model="editedPatient.phoneNumber" label="Telemovel" required></v-text-field>
+            <v-text-field v-model="editedPatient.city" label="Cidade" required></v-text-field>
+            <v-text-field v-model="editedPatient.birthday" label="Data de Nascimento" required></v-text-field>
+            <v-tabs  v-model="tab">
+              <v-tab href="#medical">Registo Médico</v-tab>
+            </v-tabs>
+  
+            <v-tabs-items v-model="tab">
+              <v-tab-item value="medical">
+                <v-text-field v-model="editedPatient.medicalRegistry.lastDoctorVisit" label="Última Visita Ao Médico"></v-text-field>
+                <v-switch v-model="editedPatient.medicalRegistry.hospitalization" label="Hospitalização"></v-switch>
+                <v-text-field 
+                  v-if="editingPatient.medicalRegistry.hospitalization" 
+                  v-model="editedPatient.medicalRegistry.hospitalizationReason" 
+                  label="Motivo da Hospitalização">
+                </v-text-field>
+                <v-text-field v-model="editedPatient.medicalRegistry.medication" label="Medicação"></v-text-field>
+                <v-text-field v-model="editedPatient.medicalRegistry.diseases" label="Patologias"></v-text-field>
+                <v-text-field v-model="editedPatient.medicalRegistry.allergies" label="Alergias"></v-text-field>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-form>
+        </v-card-text>
+
+
+        <v-card-text v-else>
           <v-form ref="form">
             <v-text-field v-model="newPatient.name" label="Nome" required></v-text-field>
             <v-text-field v-model="newPatient.phoneNumber" label="Telemovel" required></v-text-field>
@@ -27,6 +55,7 @@
                 </v-text-field>
                 <v-text-field v-model="newPatient.medicalRegistry.medication" label="Medicação"></v-text-field>
                 <v-text-field v-model="newPatient.medicalRegistry.diseases" label="Patologias"></v-text-field>
+                <v-text-field v-model="newPatient.medicalRegistry.allergies" label="Alergias"></v-text-field>
               </v-tab-item>
             </v-tabs-items>
           </v-form>
@@ -35,18 +64,21 @@
         <v-card-actions class="buttons">
           <v-spacer></v-spacer>
           <button  @click="close">Cancelar</button>
-          <button color="golden" @click="submitPatient">Guardar</button>
+          <button v-if="isEdit" color="golden" @click="editPatient">Guardar</button>
+          <button v-else color="golden" @click="submitPatient">Guardar</button>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </template>
   
   <script>
-  import { createPatient } from "@/services/PatientService.ts";
+  import { createPatient, editPatient } from "@/services/PatientService.ts";
   
   export default {
     props: {
-      isOpen: Boolean
+      isOpen: Boolean,
+      isEdit: Boolean,
+      editingPatient: Object
     },
     data() {
       return {
@@ -62,10 +94,24 @@
             hospitalizationReason: "",
             medication: "",
             diseases: "",
-            allergy:""
+            allergies: ""
+            
           }
-        }
+        },
+        editedPatient: {}
       };
+    },
+    watch: {
+      editingPatient: {
+     handler(newVal) {
+       if (newVal) {
+         console.log("Recebendo paciente para edição:", newVal); // Debug
+         this.editedPatient = JSON.parse(JSON.stringify(newVal)); // Garante uma cópia profunda
+       }
+     },
+     deep: true,
+     immediate: true
+   },
     },
     computed: {
       dialog: {
@@ -90,10 +136,25 @@
           this.$emit("patientCreated");
           this.close();
         } catch (error) {
-          console.error("Erro ao adicionar paciente:", error);
           alert("Erro ao adicionar paciente.");
         }
       },
+      
+      async editPatient() {
+  if (!this.editedPatient.name || !this.editedPatient.phoneNumber) {
+    alert("Nome e Telefone são obrigatórios!");
+    return;
+  }
+
+  try {
+    await editPatient(this.editedPatient.id, this.editedPatient);
+    alert("Dados alterados com sucesso!");
+    this.$emit("patientEdited");
+    this.close();
+  } catch (error) {
+    alert("Erro ao editar paciente.");
+  }
+},
       close() {
         this.$emit("update:isOpen", false);
       }
