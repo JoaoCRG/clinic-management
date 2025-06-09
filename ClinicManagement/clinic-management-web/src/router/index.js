@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import PatientsView from '@/views/PatientsView.vue'
 import CalendarView from '@/views/CalendarView.vue'
+import AddAppointment from '@/components/AddAppointment.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path:'/calendar',
     name:'Calendar',
     component: CalendarView,
+  },
+  {
+    path: '/add-appointment',
+    name: 'AddAppointment',
+    component: AddAppointment,
   },
 ]
 

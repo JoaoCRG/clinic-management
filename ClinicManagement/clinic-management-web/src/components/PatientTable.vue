@@ -1,20 +1,58 @@
 <template>
-  <div>
-    <button class="button" @click="showAddModal = true">Adicionar Paciente</button>
+  <div class="patient-table">
+    <!-- Search and Add Section -->
+    <div class="table-header">
+      <v-text-field
+        v-model="search"
+        prepend-inner-icon="mdi-magnify"
+        label="Pesquisar pacientes"
+        dense
+        outlined
+        hide-details
+        class="search-field"
+      ></v-text-field>
+      <v-btn
+       @click="showAddModal"
+        color="primary"
+        class="ml-4"
+       
+      >
+        <v-icon left>mdi-plus</v-icon>
+        Novo Paciente
+      </v-btn>
+    </div>
+
+    <!-- Patient Table -->
     <v-data-table
       :headers="headers"
       :items="patients"
-      class="elevation-1"
+      :search="search"
+      :loading="loading"
+      class="elevation-1 mt-4"
+      :items-per-page="10"
+      :mobile-breakpoint="0"
+      @click:row="openModal"
     >
- 
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-btn color="black" icon @click="openModal(item)">
-          <v-icon>mdi-account</v-icon>
-        </v-btn>
+      <!-- Loading Progress -->
+      <template v-slot:progress>
+        <v-progress-linear
+          indeterminate
+          color="primary"
+        ></v-progress-linear>
+      </template>
+
+      <!-- Empty State -->
+      <template v-slot:no-data>
+        <div class="text-center pa-4">
+          <v-icon large color="grey lighten-1">mdi-account-multiple</v-icon>
+          <div class="text-subtitle-1 grey--text mt-2">
+            Nenhum paciente encontrado
+          </div>
+        </div>
       </template>
     </v-data-table>
 
-    <PatientDetailsModal 
+      <PatientsDetailsModal 
   :isOpen="showModal" 
   :patient="selectedPatient"
   @update:isOpen="showModal = $event"
@@ -25,99 +63,110 @@
       @patientCreated="loadPatients"
     />
   </div>
-  
 </template>
 
 <script>
-import {createPatient, getAllPatients} from "@/services/PatientService.ts"
-import PatientDetailsModal from "@/components/PatientsDetailsModal.vue"
-import AddPatientModal from "@/components/AddPatientModal.vue"
-
+import { getAllPatients } from '@/services/PatientService.ts';
+import PatientsDetailsModal from './PatientsDetailsModal.vue';
+import AddPatientModal from './AddPatientModal.vue';
 
 export default {
+  name: 'PatientTable',
   components: {
-    PatientDetailsModal,
-    AddPatientModal
-  },
-  data() {
-    return {
-      showModal: false,
+     PatientsDetailsModal,
+     AddPatientModal
+     },
+
+  data: () => ({
+    search: '',
+    loading: false,
+    patients: [],
+    showDetailsModal: false,
+    showModal: false,
       showAddModal: false,
       selectedPatient: null,
-      patients: [],
-      headers: [
-        { text: "Nome", value: "name" },
-        { text: "Telemóvel", value: "phoneNumber" },
-        { text: "Cidade", value:"city"},
-        { text: "Detalhes", value: "actions", sortable: false } 
-      ]
-    };
-  },
-  async mounted() {
-    await this.loadPatients();
-  },
-  methods: {
-    async submitForm() {
-      try {
-        const createdPatient = await createPatient(this.newPatient);
-       
-        
-        // Limpar formulário
-        this.newPatient.name = "";
-        this.newPatient.phoneNumber = "";
+    headers: [
+      { 
+        text: 'Nome',
+        align: 'start',
+        value: 'name',
+        width: '100%'
+      }
+    ]
+  }),
 
-        // Opcional: Atualizar a lista de pacientes
-        this.$emit("patientCreated", createdPatient);
+  methods: {
+    async loadPatients() {
+      this.loading = true;
+      try {
+        const response = await getAllPatients();
+        this.patients = response;
       } catch (error) {
-        alert("Erro ao adicionar paciente.");
+        console.error('Error loading patients:', error);
+      } finally {
+        this.loading = false;
       }
     },
-    async loadPatients() {
-      try {
-        this.patients = await getAllPatients();
-      } catch (error) {
-        console.error("Erro ao buscar pacientes:", error);
-      }
+
+    openPatientDetails(patient) {
+      this.selectedPatient = patient;
+      this.showDetailsModal = true;
+    },
+
+    editPatient() {
+      this.editingPatient = this.selectedPatient;
+      this.showDetailsModal = false;
+      this.showAddModal = true;
+    },
+
+    onPatientSaved() {
+      this.showAddModal = false;
+      this.editingPatient = null;
+      this.loadPatients();
     },
     openModal(patient) {
       this.selectedPatient = patient;
       this.showModal = true;
     }
+  },
+
+  mounted() {
+    this.loadPatients();
   }
 };
 </script>
 
 <style scoped>
-.home {
+.patient-table {
+  padding: 16px;
+}
+
+.table-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-direction: column;
-  background: white;
+  gap: 16px;
 }
 
-.logo {
-  max-width: 400px;
-  margin-bottom: 20px;
+.search-field {
+  max-width: 300px;
 }
 
-.buttons {
-  display: flex;
-  gap: 20px;
+@media (max-width: 600px) {
+  .table-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-field {
+    max-width: 100%;
+  }
 }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  background: white;
-  color: rgb(216, 170, 2);
+.v-data-table ::v-deep tbody tr {
   cursor: pointer;
-  font-size: 16px;
 }
 
-button:hover {
-  background: rgb(216, 170, 2);
-  color: white;
+.v-data-table ::v-deep tbody tr:hover {
+  background-color: #f5f5f5 !important;
 }
 </style>
