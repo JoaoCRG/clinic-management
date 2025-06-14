@@ -17,3 +17,15 @@ export async function createAppointment(appointmentData) {
         return [];
     }
 }
+
+export async function getAllAppointments() {
+    try {
+        const response = await axios.get(API_URL, {
+            auth: credencials
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching appointments:", error);
+        return [];
+    }
+}

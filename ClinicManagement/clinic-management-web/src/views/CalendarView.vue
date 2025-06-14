@@ -5,24 +5,25 @@
     <img @click="goToHome" alt="Face Clinic Logo" class="logo" src="@/assets/facecliniclogo.jpg" />
   </button>
   </div>
-      <PatientTable/>
+      <DayCalendar/>
     </div>
   </template>
-  
-  <script>
-    import PatientTable from '@/components/PatientTable.vue';
-  
-  export default {
+
+<script>
+    import DayCalendar from '@/components/DayCalendar.vue';
+
+
+export default {
     components: {
-      PatientTable
+      DayCalendar
     },
     methods: {
       goToHome() {
       this.$router.push('/')
       }
     }
-  }
-  </script>
+}
+</script>
 
 <style scoped>
 .logo {
@@ -32,4 +33,3 @@
 
 </style>
 
-  

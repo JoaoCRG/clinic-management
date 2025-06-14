@@ -13,6 +13,7 @@ public class Patient {
     private Long id;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
+    
     @JoinColumn(name = "medical_registry_id", referencedColumnName = "id")
     private MedicalRegistry medicalRegistry;
     private String phoneNumber;

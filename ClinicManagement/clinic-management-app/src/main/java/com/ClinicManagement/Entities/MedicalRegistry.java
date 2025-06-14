@@ -93,7 +93,7 @@ public class MedicalRegistry {
         return allergies;
     }
 
-    public void setAllergies(String allergy) {
+    public void setAllergies(String allergies) {
         this.allergies = allergies;
     }
 }

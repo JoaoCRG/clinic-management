@@ -1,169 +1,525 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700px">
-      <v-card>
-        <v-card-title>
-          {{ patientData?.name }}
-          <v-spacer></v-spacer>
-          <v-btn icon @click="close">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-  
-        <v-card-text>
-          <v-tabs v-model="tab">
-            <v-tab href="#medical">Registo Médico</v-tab>
-            <v-tab href="#appointments">Histórico de Consultas</v-tab>
-          </v-tabs>
-  
-          <v-tabs-items v-model="tab">
-            <!-- Aba Registo Médico -->
-            <v-tab-item value="medical">
-              <v-list dense>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title> <v-icon>mdi-arrow-left</v-icon> Última Consulta</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.lastDoctorVisit }}</v-list-item-subtitle>
+  <v-dialog
+    v-model="dialogModel"
+    fullscreen
+    hide-overlay
+    transition="dialog-bottom-transition"
+  >
+    <v-card>
+      <!-- Header -->
+      <v-toolbar dark color="primary">
+        <v-btn icon @click="close">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>{{ patientData?.name }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn 
+          v-if="tab !== 'appointments'"
+          icon 
+          @click="editPatient"
+        >
+          <v-icon>{{ (editingPersonal || editingMedical) ? 'mdi-content-save' : 'mdi-pencil' }}</v-icon>
+        </v-btn>
+      </v-toolbar>
+
+      <!-- Content -->
+      <v-container class="pa-0">
+        <v-tabs
+          v-model="tab"
+          fixed-tabs
+          background-color="primary"
+          dark
+          show-arrows
+        >
+          <v-tab href="#personal">
+            <v-icon left>mdi-account</v-icon>
+            Dados Pessoais
+          </v-tab>
+          <v-tab href="#medical">
+            <v-icon left>mdi-medical-bag</v-icon>
+            Registo Médico
+          </v-tab>
+          <v-tab href="#appointments">
+            <v-icon left>mdi-calendar-clock</v-icon>
+            Consultas
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items 
+          v-model="tab" 
+          class="pt-2"
+          touchless
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
+        >
+          <!-- Personal Details Tab -->
+          <v-tab-item value="personal">
+            <v-list>
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-account</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Nome</v-list-item-title>
+                  <v-list-item-subtitle>
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.name"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
+                      {{ patientData?.name }}
+                    </template>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-phone</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Telefone</v-list-item-title>
+                  <v-list-item-subtitle>
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.phoneNumber"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
+                      {{ patientData?.phoneNumber }}
+                    </template>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-map-marker</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Cidade</v-list-item-title>
+                  <v-list-item-subtitle>
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.city"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
+                    {{ patientData?.city }}
+                    </template>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-cake-variant</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Data de Nascimento</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ patientData?.birthday }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-row v-if="editingPersonal" class="px-4 mt-2">
+                <v-spacer></v-spacer>
+                <v-btn text color="error" @click="cancelEdit">Cancelar</v-btn>
+                <v-btn text color="primary" @click="savePersonal">Salvar</v-btn>
+              </v-row>
+            </v-list>
+          </v-tab-item>
+
+          <!-- Medical Tab -->
+          <v-tab-item value="medical">
+            <v-list>
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-calendar-check</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Última Consulta</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ patientData?.medicalRegistry?.lastDoctorVisit || 'Não registrado' }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-medication</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Hospitalização</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ patientData?.medicalRegistry?.hospitalization ? 'Sim' : 'Não' }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <template v-if="patientData?.medicalRegistry?.hospitalization">
+                <v-list-item two-line>
+                  <v-list-item-content class="pl-16">
+                    <v-list-item-title>Motivo</v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ patientData?.medicalRegistry?.hospitalizationReason }}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
+              </template>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-pill</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Medicação</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ patientData?.medicalRegistry?.medication || 'Nenhuma' }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-divider></v-divider>
+
+              <v-list-item two-line>
+                <v-list-item-avatar>
+                  <v-icon large color="primary">mdi-allergy</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>Alergias</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ patientData?.medicalRegistry?.allergies || 'Nenhuma' }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-tab-item>
+
+          <!-- Appointments Tab -->
+          <v-tab-item value="appointments">
+            <v-list>
+              <template v-if="patientData?.appointmentHistory?.length">
+                <v-list-item
+                  v-for="appointment in patientData.appointmentHistory"
+                  :key="appointment.id"
+                  class="mb-2"
+                >
                   <v-list-item-content>
-                    <v-list-item-title><v-icon>mdi-medication</v-icon>  Hospitalização</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.hospitalization ? 'Sim' : 'Não' }}</v-list-item-subtitle>
+                    <v-list-item-title class="text-h6">
+                      {{ formatDate(appointment.date) }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ appointment.procedure }}
+                    </v-list-item-subtitle>
+                    
+                    <v-chip-group v-if="appointment.lots?.length" class="mt-2">
+                      <v-chip
+                        v-for="lot in appointment.lots"
+                        :key="lot.id"
+                        small
+                        outlined
+                      >
+                        {{ lot.brand }} - Lote: {{ lot.lotNumber }}
+                      </v-chip>
+                    </v-chip-group>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="patient?.medicalRegistry?.hospitalization">
-                  <v-list-item-content>
-                    <v-list-item-title><v-icon>mdi-information</v-icon> Motivo</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.hospitalizationReason }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title><v-icon>mdi-pill</v-icon>  Medicação</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.medication }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title><v-icon>mdi-medical-bag</v-icon> Doenças</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.diseases }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-content>
-                    <v-list-item-title><v-icon>mdi-allergy</v-icon> Alergias</v-list-item-title>
-                    <v-list-item-subtitle>{{ patient?.medicalRegistry?.allergies }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-              <v-card-actions class="buttons">
-          <v-spacer></v-spacer>
-          <button>Editar Informação</button>
-        </v-card-actions>
-            </v-tab-item>
-  
-            <!-- Aba Histórico de Consultas -->
-            <v-tab-item value="appointments">
-              <v-list dense>
-                <template v-if="patient?.appointmentHistory.length">
-                  <v-list-item v-for="appointment in patient.appointmentHistory" :key="appointment.id">
-                    <v-list-item-content>
-                      <v-list-item-title>Data: {{ appointment.date }}</v-list-item-title>
-                      <v-list-item-subtitle>Procedimento: {{ appointment.procedure }}</v-list-item-subtitle>
-                      
-                      <v-list dense>
-                        <v-list-item v-for="lot in appointment.lots" :key="lot.id">
-                          <v-list-item-content>
-                            <v-list-item-title>Lote: {{ lot.lotNumber }}</v-list-item-title>
-                            <v-list-item-subtitle>Marca: {{ lot.brand }} - Ref: {{ lot.reference }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-list-item-content>
-                  </v-list-item>
-                </template>
-                <v-list-item v-else>
-                  <v-list-item-content>
-                    <v-list-item-title>Nenhum histórico encontrado.</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-              <v-card-actions class="buttons">
-          <v-spacer></v-spacer>
-          <button>Adicionar Marcação</button>
-        </v-card-actions>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </template>
-  
-  <script>
+              </template>
+              <v-list-item v-else>
+                <v-list-item-content>
+                  <v-list-item-title class="text-center grey--text">
+                    Nenhuma consulta registrada
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-container>
+
+      <!-- Floating Action Button -->
+      <v-fab-transition>
+        <v-btn
+          v-if="tab === 'appointments'"
+          color="primary"
+          dark
+          fixed
+          bottom
+          right
+          fab
+          class="mb-8 mr-8"
+          @click="$emit('add-appointment')"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </v-fab-transition>
+
+      <!-- Edit Patient Dialog -->
+      <v-dialog v-model="showEditModal" max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Editar Paciente</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="editedPatient.name"
+                    label="Nome"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="editedPatient.phoneNumber"
+                    label="Telefone"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="editedPatient.city"
+                    label="Cidade"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="showEditModal = false"
+            >
+              Cancelar
+            </v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="savePatient"
+            >
+              Salvar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card>
+  </v-dialog>
+
+ 
+</template>
+
+<script>
+import { editPatient } from '@/services/PatientService.ts';
+
 export default {
-  methods: {
-  close() {
-    this.$emit("update:isOpen", false); // Emite evento para fechar o modal
-  }
-},
+  name: 'PatientsDetailsModal',
+  
+
   props: {
     isOpen: Boolean,
     patient: Object
   },
+
   data() {
     return {
-      tab: "medical",
-      patientData: null // Armazena localmente para garantir atualização reativa
+      tab: 'medical',
+      isModalOpen: false,
+      selectedPatient: null,
+      patientData: null,
+      touchStart: null,
+      touchEnd: null,
+      showEditModal: false,
+      editedPatient: {
+        name: '',
+        phoneNumber: '',
+        city: ''
+      },
+      editingPersonal: false,
+      editingMedical: false,
+      editedMedical: {
+        hospitalization: false,
+        hospitalizationReason: '',
+        medication: '',
+        allergies: ''
+      }
     };
   },
+
   computed: {
-    dialog: {
+    dialogModel: {
       get() {
         return this.isOpen;
       },
       set(value) {
-        this.$emit("update:isOpen", value);
+        this.$emit('update:isOpen', value);
       }
     }
   },
+
+  methods: {
+    close() {
+      this.$emit('update:isOpen', false);
+    },
+
+    openPatientModal(patient) {
+      this.selectedPatient = { ...patient };
+      this.isModalOpen = true;
+    },
+
+    onPatientSaved() {
+      this.isModalOpen = false;
+      this.$emit('refresh');
+    },
+
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    },
+
+    handleTouchStart(e) {
+      this.touchStart = e.changedTouches[0].screenX;
+    },
+    
+    handleTouchMove(e) {
+      this.touchEnd = e.changedTouches[0].screenX;
+    },
+    
+    handleTouchEnd() {
+      const swipeLength = this.touchStart - this.touchEnd;
+      if (Math.abs(swipeLength) > 50) {
+        const tabs = ['medical', 'appointments'];
+        const currentIndex = tabs.indexOf(this.tab);
+        if (swipeLength > 0 && currentIndex < tabs.length - 1) {
+          this.tab = tabs[currentIndex + 1];
+        } else if (swipeLength < 0 && currentIndex > 0) {
+          this.tab = tabs[currentIndex - 1];
+        }
+      }
+      this.touchStart = null;
+      this.touchEnd = null;
+    },
+
+    editPatient() {
+      if (this.tab === 'personal') {
+        this.editingPersonal = true;
+        this.editedPatient = { ...this.patientData };
+      } else if (this.tab === 'medical') {
+        this.editingMedical = true;
+        this.editedMedical = { ...this.patientData.medicalRegistry };
+      }
+    },
+
+    cancelEdit() {
+      this.editingPersonal = false;
+      this.editingMedical = false;
+      this.editedPatient = {};
+      this.editedMedical = {};
+    },
+
+    async savePatient() {
+      try {
+        await editPatient(this.editedPatient.id, this.editedPatient);
+        this.showEditModal = false;
+        this.$emit('patient-updated');
+        // Refresh patient data
+        this.patientData = { ...this.editedPatient };
+      } catch (error) {
+        console.error('Error updating patient:', error);
+        // You might want to show an error message to the user
+      }
+    },
+
+    async savePersonal() {
+      try {
+        await editPatient(this.patientData.id, this.editedPatient);
+        this.patientData = { ...this.patientData, ...this.editedPatient };
+        this.editingPersonal = false;
+        this.$emit('patient-updated');
+      } catch (error) {
+        console.error('Error updating patient:', error);
+      }
+    },
+
+    async saveMedical() {
+      try {
+        const updatedPatient = {
+          ...this.patientData,
+          medicalRegistry: this.editedMedical
+        };
+        await editPatient(this.patientData.id, updatedPatient);
+        this.patientData = updatedPatient;
+        this.editingMedical = false;
+        this.$emit('patient-updated');
+      } catch (error) {
+        console.error('Error updating medical registry:', error);
+      }
+    },
+
+    // Add method to handle new appointment
+    addNewAppointment() {
+      this.$emit('add-appointment', this.patientData);
+    }
+  },
+
   watch: {
     patient: {
       handler(newPatient) {
-        console.log("Novo paciente recebido na modal:", newPatient); // Debug
         this.patientData = newPatient;
       },
-      immediate: true // Garante que o watch roda na criação do componente
+      immediate: true
+    },
+    tab() {
+      // Reset editing state when changing tabs
+      this.editingPersonal = false;
+      this.editingMedical = false;
     }
   }
 };
 </script>
 
 <style scoped>
-.buttons {
-  display: flex;
-  gap: 20px;
+.v-list-item {
+  padding: 12px 16px;
 }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  background: white;
-  color: rgb(216, 170, 2);
-  cursor: pointer;
-  font-size: 16px;
+.v-list-item__avatar {
+  margin-right: 16px;
 }
 
-button:hover {
-  background: rgb(216, 170, 2);
-  color: white;
+.v-chip-group {
+  margin-left: -4px;
 }
 
-title {
-  background: rgb(216, 170, 2);
-font-size: large;
-}
-.logo {
-align-content: center;
-width: 200px;
+.v-chip {
+  margin: 4px;
 }
 </style>
 
-  
