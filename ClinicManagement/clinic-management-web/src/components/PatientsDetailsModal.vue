@@ -13,8 +13,12 @@
         </v-btn>
         <v-toolbar-title>{{ patientData?.name }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="editPatient">
-          <v-icon>mdi-pencil</v-icon>
+        <v-btn 
+          v-if="tab !== 'appointments'"
+          icon 
+          @click="editPatient"
+        >
+          <v-icon>{{ (editingPersonal || editingMedical) ? 'mdi-content-save' : 'mdi-pencil' }}</v-icon>
         </v-btn>
       </v-toolbar>
 
@@ -59,7 +63,16 @@
                 <v-list-item-content>
                   <v-list-item-title>Nome</v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ patientData?.name }}
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.name"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
+                      {{ patientData?.name }}
+                    </template>
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -73,7 +86,16 @@
                 <v-list-item-content>
                   <v-list-item-title>Telefone</v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ patientData?.phoneNumber }}
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.phoneNumber"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
+                      {{ patientData?.phoneNumber }}
+                    </template>
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -87,7 +109,16 @@
                 <v-list-item-content>
                   <v-list-item-title>Cidade</v-list-item-title>
                   <v-list-item-subtitle>
+                    <v-text-field
+                      v-if="editingPersonal"
+                      v-model="editedPatient.city"
+                      dense
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                    <template v-else>
                     {{ patientData?.city }}
+                    </template>
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -101,10 +132,16 @@
                 <v-list-item-content>
                   <v-list-item-title>Data de Nascimento</v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ formatDate(patientData?.birthDate) || 'Não informado' }}
+                    {{ patientData?.birthday }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
+
+              <v-row v-if="editingPersonal" class="px-4 mt-2">
+                <v-spacer></v-spacer>
+                <v-btn text color="error" @click="cancelEdit">Cancelar</v-btn>
+                <v-btn text color="primary" @click="savePersonal">Salvar</v-btn>
+              </v-row>
             </v-list>
           </v-tab-item>
 
@@ -122,6 +159,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
+            </v-list>
 
               <v-divider></v-divider>
 
@@ -320,6 +358,14 @@ export default {
         name: '',
         phoneNumber: '',
         city: ''
+      },
+      editingPersonal: false,
+      editingMedical: false,
+      editedMedical: {
+        hospitalization: false,
+        hospitalizationReason: '',
+        medication: '',
+        allergies: ''
       }
     };
   },
@@ -382,8 +428,20 @@ export default {
     },
 
     editPatient() {
-      this.editedPatient = { ...this.patientData };
-      this.showEditModal = true;
+      if (this.tab === 'personal') {
+        this.editingPersonal = true;
+        this.editedPatient = { ...this.patientData };
+      } else if (this.tab === 'medical') {
+        this.editingMedical = true;
+        this.editedMedical = { ...this.patientData.medicalRegistry };
+      }
+    },
+
+    cancelEdit() {
+      this.editingPersonal = false;
+      this.editingMedical = false;
+      this.editedPatient = {};
+      this.editedMedical = {};
     },
 
     async savePatient() {
@@ -397,6 +455,37 @@ export default {
         console.error('Error updating patient:', error);
         // You might want to show an error message to the user
       }
+    },
+
+    async savePersonal() {
+      try {
+        await editPatient(this.patientData.id, this.editedPatient);
+        this.patientData = { ...this.patientData, ...this.editedPatient };
+        this.editingPersonal = false;
+        this.$emit('patient-updated');
+      } catch (error) {
+        console.error('Error updating patient:', error);
+      }
+    },
+
+    async saveMedical() {
+      try {
+        const updatedPatient = {
+          ...this.patientData,
+          medicalRegistry: this.editedMedical
+        };
+        await editPatient(this.patientData.id, updatedPatient);
+        this.patientData = updatedPatient;
+        this.editingMedical = false;
+        this.$emit('patient-updated');
+      } catch (error) {
+        console.error('Error updating medical registry:', error);
+      }
+    },
+
+    // Add method to handle new appointment
+    addNewAppointment() {
+      this.$emit('add-appointment', this.patientData);
     }
   },
 
@@ -406,6 +495,11 @@ export default {
         this.patientData = newPatient;
       },
       immediate: true
+    },
+    tab() {
+      // Reset editing state when changing tabs
+      this.editingPersonal = false;
+      this.editingMedical = false;
     }
   }
 };
