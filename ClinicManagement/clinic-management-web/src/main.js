@@ -15,3 +15,8 @@ new Vue({
   vuetify, // Adiciona o Vuetify
   render: h => h(App)
 }).$mount('#app');
+
+Vue.filter('currency', value => {
+  if (value == null) return '€ 0,00';
+  return Number(value).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+});

@@ -12,10 +12,9 @@
         class="search-field"
       ></v-text-field>
       <v-btn
-       @click="showAddModal"
+        @click="openAddModal"
         color="primary"
         class="ml-4"
-       
       >
         <v-icon left>mdi-plus</v-icon>
         Novo Paciente
@@ -52,15 +51,16 @@
       </template>
     </v-data-table>
 
-      <PatientsDetailsModal 
-  :isOpen="showModal" 
-  :patient="selectedPatient"
-  @update:isOpen="showModal = $event"
-/>
-<AddPatientModal
+    <PatientsDetailsModal 
+      :isOpen="showModal" 
+      :patient="selectedPatient"
+      @update:isOpen="showModal = $event"
+      @patient-deleted="loadPatients"
+    />
+    <AddPatientModal
       :isOpen="showAddModal"
       @update:isOpen="showAddModal = $event"
-      @patientCreated="loadPatients"
+      @patient-created="loadPatients"
     />
   </div>
 </template>
@@ -73,18 +73,17 @@ import AddPatientModal from './AddPatientModal.vue';
 export default {
   name: 'PatientTable',
   components: {
-     PatientsDetailsModal,
-     AddPatientModal
-     },
+    PatientsDetailsModal,
+    AddPatientModal
+  },
 
   data: () => ({
     search: '',
     loading: false,
     patients: [],
-    showDetailsModal: false,
-    showModal: false,
-      showAddModal: false,
-      selectedPatient: null,
+    showModal: false, 
+    showAddModal: false,
+    selectedPatient: null,
     headers: [
       { 
         text: 'Nome',
@@ -108,25 +107,12 @@ export default {
       }
     },
 
-    openPatientDetails(patient) {
-      this.selectedPatient = patient;
-      this.showDetailsModal = true;
-    },
-
-    editPatient() {
-      this.editingPatient = this.selectedPatient;
-      this.showDetailsModal = false;
-      this.showAddModal = true;
-    },
-
-    onPatientSaved() {
-      this.showAddModal = false;
-      this.editingPatient = null;
-      this.loadPatients();
-    },
     openModal(patient) {
       this.selectedPatient = patient;
       this.showModal = true;
+    },
+    openAddModal() {
+      this.showAddModal = true;
     }
   },
 

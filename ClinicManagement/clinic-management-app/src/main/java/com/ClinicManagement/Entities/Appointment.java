@@ -1,7 +1,8 @@
 package com.ClinicManagement.Entities;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,29 +11,31 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+    private LocalDateTime date;
     private String procedure;
-    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
-    private List<Lot> lots;
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Lot> lots = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+    private Integer price;
 
     public Appointment() {}
 
-    public Appointment(Long id, LocalDate date, String procedure, List<Lot> lots, Patient patient) {
+    public Appointment(Long id, LocalDateTime date, String procedure, List<Lot> lots, Patient patient, Integer price) {
         this.id = id;
         this.date = date;
         this.procedure = procedure;
         this.lots = lots;
         this.patient = patient;
+        this.price = price;
     }
 
     public Long getId() {
         return id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -44,7 +47,7 @@ public class Appointment {
         return lots;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -60,12 +63,19 @@ public class Appointment {
         this.lots = lots;
     }
 
-    public Patient getPacient() {
+    public Patient getPatient() {
         return patient;
     }
 
-    public void setPacient(Patient patient) {
+    public void setPatient(Patient patient) {
         this.patient = patient;
     }
 
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 }

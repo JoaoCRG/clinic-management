@@ -1,5 +1,6 @@
 package com.ClinicManagement.Controllers;
 
+import com.ClinicManagement.DTOs.AppointmentDTO;
 import com.ClinicManagement.Entities.Appointment;
 import com.ClinicManagement.Services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +22,20 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public List<Appointment> getAllAppointments() {
+    public List<AppointmentDTO> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long id) {
-        return ResponseEntity.ok(appointmentService.getAppointmentById(id));
-    }
 
     @PostMapping("/add")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-        Appointment newAppointment = appointmentService.createAppointment(appointment);
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody Appointment appointment) {
+        AppointmentDTO newAppointment = appointmentService.createAppointment(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAppointment);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id, @RequestBody Appointment updatedAppointment) {
-        return ResponseEntity.ok(appointmentService.updateAppointment(id, updatedAppointment));
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<AppointmentDTO> editAppointment(@PathVariable Long id, @RequestBody Appointment updatedAppointment) {
+        return ResponseEntity.ok(appointmentService.editAppointment(id, updatedAppointment));
     }
 
     @DeleteMapping("/{id}")

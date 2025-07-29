@@ -1,7 +1,7 @@
 package com.ClinicManagement.DTOs;
 
 import com.ClinicManagement.Entities.MedicalRegistry;
-import java.util.Date;
+import java.sql.Date;
 
 public class MedicalRegistryDTO {
     private Long id;
@@ -11,6 +11,8 @@ public class MedicalRegistryDTO {
     private String medication;
     private String diseases;
     private String allergies;
+
+    public MedicalRegistryDTO (){}
 
     public MedicalRegistryDTO(MedicalRegistry medicalRegistry) {
         this.id = medicalRegistry.getId();

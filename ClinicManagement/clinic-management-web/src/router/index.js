@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import PatientsView from '@/views/PatientsView.vue'
 import CalendarView from '@/views/CalendarView.vue'
-import AddAppointment from '@/components/AddAppointment.vue'
+import AddAppointmentModal from '@/components/AddAppointmentModal.vue'
 
 Vue.use(VueRouter)
 
@@ -25,8 +25,8 @@ const routes = [
   },
   {
     path: '/add-appointment',
-    name: 'AddAppointment',
-    component: AddAppointment,
+    name: 'AddAppointmentModal',
+    component: AddAppointmentModal,
   },
 ]
 
