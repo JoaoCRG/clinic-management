@@ -5,12 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e243f8f2-7a92-42bf-88be-a550d82ec56f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/AddAppointment.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/db/changelog/delete_consent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/db/changelog/delete_lot_table.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/CORSConfig/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/CORSConfig/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/ClinicManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/ClinicManagementApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/AppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/AppointmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/LotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/LotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/MedicalRegistryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/PatientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/PatientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/AppointmentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/AppointmentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/LotDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/LotDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/MedicalRegistryDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/MedicalRegistryDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/PatientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/DTOs/PatientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Appointment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Lot.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Lot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Patient.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Entities/Patient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Repositories/LotRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Repositories/LotRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/AppointmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/AppointmentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/LotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/LotService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/MedicalRegistryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/PatientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/PatientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/db/changelog/master.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/resources/db/changelog/master.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/AddAppointment.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/AddPatientModal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/AddPatientModal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/DayCalendar.vue" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/PatientTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/PatientTable.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/PatientsDetailsModal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/PatientsDetailsModal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/components/asdads" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/services/AppointmentService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/services/AppointmentService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/services/PatientService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/services/PatientService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/views/CalendarView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/ClinicManagement/clinic-management-web/src/views/CalendarView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +49,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -41,13 +70,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Clinic Management.executor": "Run",
+    "Application.Clinic Management.executor": "Debug",
     "DefaultHtmlFileTemplate": "HTML File",
     "Maven.ClinicManagement [clean].executor": "Run",
     "Maven.ClinicManagement [install].executor": "Run",
+    "Maven.ClinicManagement [package].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature/addEditPatient-addAddAppointment",
+    "git-widget-placeholder": "improvements",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/joao.guimaraes/workspace/engineering/fuse-server",
     "project.structure.last.edited": "Project",
@@ -95,21 +125,46 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/PatientService.java</url>
-          <line>42</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/LotController.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Services/LotService.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/PatientController.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="15" />
+          <line>50</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/PatientController.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="16" />
+          <line>68</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/PatientController.java</url>
+          <line>67</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/AppointmentController.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ClinicManagement/clinic-management-app/src/main/java/com/ClinicManagement/Controllers/AppointmentController.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.ClinicManagement.Services.PatientService" memberName="patientRepository" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>
