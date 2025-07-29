@@ -1,27 +1,35 @@
 <template>
-    <div>
-      <div class="home">
-        <button>
-    <img @click="goToHome" alt="Face Clinic Logo" class="logo" src="@/assets/facecliniclogo.jpg" />
-  </button>
-  </div>
-      <DayCalendar/>
+  <div>
+    <div class="home">
+      <button>
+        <img @click="goToHome" alt="Face Clinic Logo" class="logo" src="@/assets/facecliniclogo.jpg" />
+      </button>
     </div>
-  </template>
+    <AppointmentCalendar :appointments="appointments" />
+  </div>
+</template>
 
 <script>
-    import DayCalendar from '@/components/DayCalendar.vue';
-
+import AppointmentCalendar from '@/components/AppointmentCalendar.vue';
+import { getAllAppointments } from '@/services/AppointmentService.ts';
 
 export default {
-    components: {
-      DayCalendar
-    },
-    methods: {
-      goToHome() {
+  components: {
+    AppointmentCalendar
+  },
+  data() {
+    return {
+      appointments: []
+    };
+  },
+  async mounted() {
+    this.appointments = await getAllAppointments();
+  },
+  methods: {
+    goToHome() {
       this.$router.push('/')
-      }
     }
+  }
 }
 </script>
 

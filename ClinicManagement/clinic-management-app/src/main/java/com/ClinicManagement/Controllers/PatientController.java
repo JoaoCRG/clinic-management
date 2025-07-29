@@ -3,8 +3,11 @@ package com.ClinicManagement.Controllers;
 import com.ClinicManagement.DTOs.PatientDTO;
 import com.ClinicManagement.Entities.Patient;
 import com.ClinicManagement.Services.PatientService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,8 +38,16 @@ public class PatientController {
         return ResponseEntity.ok(patients);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<PatientDTO> createPatient(@RequestBody Patient patient) {
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PatientDTO> createPatient(
+            @RequestPart("patient") PatientDTO patientDTO,
+            @RequestPart(value = "consent", required = false) MultipartFile consentFile
+    ) throws IOException {
+        byte[] consentBytes = null;
+        if(!(consentFile == null)) {
+            consentBytes = consentFile.getBytes();
+        }
+        Patient patient = patientService.convertToEntity(patientDTO, consentBytes);
         PatientDTO createdPatient = patientService.createPatient(patient);
         return ResponseEntity.ok(createdPatient);
     }
@@ -47,9 +58,20 @@ public class PatientController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<PatientDTO> editPatient(@PathVariable Long id, @RequestBody Patient patient) {
-        PatientDTO editedPatientDTO = patientService.editPatient(id, patient);
-        return ResponseEntity.ok(editedPatientDTO);
+    @PutMapping(value = "/edit/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PatientDTO> editPatient(
+            @PathVariable Long id,
+            @RequestPart("patient") PatientDTO patientDTO,
+            @RequestPart(value = "consent", required = false) MultipartFile consentFile
+    ) throws IOException {
+        byte[] consentBytes = null;
+        if (consentFile != null && !consentFile.isEmpty()) {
+            consentBytes = consentFile.getBytes();
+        }
+
+        Patient updatedPatient = patientService.convertToEntity(patientDTO, consentBytes);
+        PatientDTO updatedDTO = patientService.editPatient(id, updatedPatient);
+        return ResponseEntity.ok(updatedDTO);
     }
+
 }

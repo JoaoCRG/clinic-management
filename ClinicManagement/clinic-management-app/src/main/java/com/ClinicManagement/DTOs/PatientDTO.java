@@ -12,6 +12,9 @@ public class PatientDTO {
     private Date birthday;
     private MedicalRegistryDTO medicalRegistry;
     private List<AppointmentDTO> appointmentHistory;
+    private byte[] consent;
+
+    public PatientDTO(){}
 
     public PatientDTO(Patient patient) {
         this.id = patient.getId();
@@ -23,6 +26,7 @@ public class PatientDTO {
         this.appointmentHistory = patient.getAppointmentHistory().stream()
                 .map(AppointmentDTO::new)
                 .toList();
+        this.consent = patient.getConsent();
     }
 
     public Long getId() {
@@ -79,5 +83,13 @@ public class PatientDTO {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public byte[] getConsent() {
+        return consent;
+    }
+
+    public void setConsent(byte[] consent) {
+        this.consent = consent;
     }
 }

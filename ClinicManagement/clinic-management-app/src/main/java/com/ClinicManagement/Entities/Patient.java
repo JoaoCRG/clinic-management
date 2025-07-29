@@ -13,7 +13,6 @@ public class Patient {
     private Long id;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
-    
     @JoinColumn(name = "medical_registry_id", referencedColumnName = "id")
     private MedicalRegistry medicalRegistry;
     private String phoneNumber;
@@ -21,11 +20,12 @@ public class Patient {
     private List<Appointment> appointmentHistory = new ArrayList<>();
     private String city;
     private Date birthday;
+    @Column(name = "consent", columnDefinition = "bytea")
+    private byte[] consent;
 
+    public Patient() {}
 
-public Patient() {}
-
-    public Patient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory, String city, Date birthday) {
+    public Patient(String name, Long id, MedicalRegistry medicalRegistry, String phoneNumber, List<Appointment> appointmentHistory, String city, Date birthday, byte[] consent) {
         this.name = name;
         this.id = id;
         this.medicalRegistry = medicalRegistry;
@@ -33,6 +33,7 @@ public Patient() {}
         this.appointmentHistory = appointmentHistory;
         this.city = city;
         this.birthday = birthday;
+        this.consent = consent;
     }
 
     public Long getId() {
@@ -89,5 +90,13 @@ public Patient() {}
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public byte[] getConsent() {
+        return consent;
+    }
+
+    public void setConsent(byte[] consent) {
+        this.consent = consent;
     }
 }
