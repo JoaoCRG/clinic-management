@@ -1,9 +1,0 @@
-  services:
-    postgres:
-      image: 'postgres'
-      environment:
-        - 'POSTGRES_DB=faceclinicdb'
-        - 'POSTGRES_PASSWORD=postgres'
-        - 'POSTGRES_USER=admin'
-      ports:
-        - '5432:5432'
