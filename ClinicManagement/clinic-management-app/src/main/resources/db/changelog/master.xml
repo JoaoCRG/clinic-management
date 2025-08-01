@@ -8,6 +8,5 @@
 
     <include file="db/changelog/initial.xml"/>
     <include file="db/changelog/add_allergies.xml"/>
-    <include file="db/changelog/delete_consent.xml"/>
     <include file="db/changelog/delete_lot_table.xml"/>
 </databaseChangeLog>
