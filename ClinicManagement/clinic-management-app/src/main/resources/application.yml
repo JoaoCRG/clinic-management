@@ -19,20 +19,22 @@ spring:
     use-hal-as-default-json-media-type: false
   mvc:
     converters:
-     preferred-json-mapper: jackson
-    datasource:
-      url: ${DB_URL:jdbc:postgresql://localhost:5432/faceclinicdb}
-      username: ${DB_USER:admin}
-      password: ${DB_PASSWORD:postgres}
-      driver-class-name: org.postgresql.Driver
-    resources:
-      static-locations: classpath:/static/
-      thymeleaf:
-        prefix: classpath:/templates/
-        suffix: .html
-        mode: HTML
-        encoding: UTF-8
-        cache: false
+      preferred-json-mapper: jackson
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  resources:
+    static-locations: classpath:/static/
+    thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+      mode: HTML
+      encoding: UTF-8
+      cache: false
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
